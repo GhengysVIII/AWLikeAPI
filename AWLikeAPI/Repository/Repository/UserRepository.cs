@@ -36,7 +36,7 @@ namespace AWLike.Repository
 
         public override int Insert(UserPOCO Entity)
         {
-            Command cmd = new Command($"INSERT INTO {TableName}(Mail, Username, Password) OUTPUT inserted.id VALUES(@Mail, @Username, @Password)");
+            Command cmd = new Command($"INSERT INTO {TableName}(Email, Username, Password) OUTPUT inserted.id VALUES(@Mail, @Username, @Password)");
             cmd.AddParameter("Email", Entity.Email);
             cmd.AddParameter("Username", Entity.Username);
             cmd.AddParameter("Password", Entity.Password);
@@ -55,9 +55,18 @@ namespace AWLike.Repository
             return (Db.ExecuteNonQuery(cmd)>0);
         }
 
+        public UserPOCO Get(int Id)
+        {
+            Command cmd = new Command($"SELECT * FROM [dbo].{TableName} WHERE Id = @Id");
+
+            cmd.AddParameter("Id", Id);
+
+            return Db.ExecuteReader(cmd, Selector).SingleOrDefault();
+        }
+
         public UserPOCO Get(string Username, string Password)
         {
-            Command cmd = new Command($"SELECT * FROM {TableName} WHERE (Email LIKE @Username OR Username LIKE @Username) AND Pwd LIKE @Password;");
+            Command cmd = new Command($"SELECT * FROM [dbo].{TableName} WHERE (Username = @Username OR Email = @Username) AND Password = @Password");
 
             cmd.AddParameter("Username", Username);
             cmd.AddParameter("Password", Password);
