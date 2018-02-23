@@ -19,7 +19,8 @@ namespace AWLikeAPI.Controllers
         [Route("api/user/log")]
         public UserLight Log(UserCredentials UserCred)
         {
-            return UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
+            UserLight UL =  UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
+            return UL;
         }
 
         [HttpPost]
