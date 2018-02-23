@@ -46,6 +46,7 @@ namespace AWLike.Repository
 
         public override bool Update(UserPOCO Entity)
         {
+            Command cmd = new Command($"UPDATE {TableName} set (Email= @Email , Username= @Username, Password= @Password) where Id = @Id ");
             cmd.AddParameter("Id", Entity.Id);
             cmd.AddParameter("Email", Entity.Email);
             cmd.AddParameter("Username", Entity.Username);
