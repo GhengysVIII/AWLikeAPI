@@ -16,12 +16,14 @@ namespace AWLikeAPI.Controllers
     {
 
         [HttpPost]
+        [Route("api/user/log")]
         public UserLight Log(UserCredentials UserCred)
         {
             return UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
         }
 
         [HttpPost]
+        [Route("api/user/register")]
         public UserLight Register(UserRegister UserReg)
         {
             int userIDRegistered = UserRepository.Instance.Insert(UserReg.ToUserPoco());

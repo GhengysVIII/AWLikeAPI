@@ -36,7 +36,7 @@ namespace AWLike.Repository
 
         public override int Insert(UserPOCO Entity)
         {
-            Command cmd = new Command($"INSERT INTO {TableName}(Email, Username, Password) OUTPUT inserted.id VALUES(@Mail, @Username, @Password)");
+            Command cmd = new Command($"INSERT INTO {TableName}(Email, Username, Password) OUTPUT inserted.id VALUES(@Email, @Username, @Password)");
             cmd.AddParameter("Email", Entity.Email);
             cmd.AddParameter("Username", Entity.Username);
             cmd.AddParameter("Password", Entity.Password);
