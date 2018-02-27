@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AWLike.Repository;
+using AWLikeAPI.Models;
+using AWLikeAPI.Models.Game;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,11 +15,9 @@ namespace AWLikeAPI.Controllers
         
         [HttpGet]
         [Route("api/game/getAllAvailable")]
-        public UserLight getAll(UserCredentials UserCred)
+        public IEnumerable<GameInfo> getAllAvailable()
         {
-
-            UserLight UL = UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
-            return UL;
+            return GameRepository.Instance.GetAllGameInfoAvailable();
         }
 
         [HttpPost]

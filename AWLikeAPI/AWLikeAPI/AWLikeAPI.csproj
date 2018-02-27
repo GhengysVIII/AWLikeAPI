@@ -164,6 +164,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Game\GameInfo.cs" />
     <Compile Include="Models\UserCredentials.cs" />
     <Compile Include="Models\UserLight.cs" />
     <Compile Include="Models\UserRegister.cs" />
