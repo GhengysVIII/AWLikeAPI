@@ -8,7 +8,7 @@ namespace Toolbox.BaseRepository
     public abstract class BaseRepository<TKey, TEntity> : IRepository<TKey, TEntity>
         where TEntity : IEntity<TKey>
     {
-        private const string _ConnectionString = @"Server=DESKTOP-BSRAOO3\SQLEXPRESS;Database=AWLike;Trusted_Connection=True;";
+        private const string _ConnectionString = @"Server=DESKTOP-BSRAOO3\SQLEXPRESS;Database=AWLike;User ID=AWLike;Password=AWLike;";
         private string _TableName;
         private Connection _Db;
 
