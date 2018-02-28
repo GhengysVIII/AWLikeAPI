@@ -105,9 +105,7 @@ namespace AWLike.Repository
                     Password = "",
                     
                 });
-
                 
-
                 //var ItemList = list.FirstOrDefault(item => item.Id == gamePlayerDBItem.Id);
                 //if (ItemList == null)
                 //{
