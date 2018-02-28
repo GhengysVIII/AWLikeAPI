@@ -56,7 +56,7 @@ namespace AWLike.Repository
             return (Db.ExecuteNonQuery(cmd)>0);
         }
 
-        public UserPOCO Get(int Id)
+        public override UserPOCO Get(int Id)
         {
             Command cmd = new Command($"SELECT * FROM {TableName} WHERE Id = @Id");
 

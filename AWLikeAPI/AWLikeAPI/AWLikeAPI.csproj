@@ -169,6 +169,7 @@
     <Compile Include="Models\UserLight.cs" />
     <Compile Include="Models\UserRegister.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\Mappers\GameMappercs.cs" />
     <Compile Include="Tools\Mappers\UserMapper.cs" />
   </ItemGroup>
   <ItemGroup>

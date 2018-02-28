@@ -7,26 +7,27 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using AWLikeAPI.Tools.Mappers;
 
 namespace AWLikeAPI.Controllers
 {
-    public class GameController : ApiController
+    public class TestController : ApiController
     {
-        
         [HttpGet]
-        [Route("api/game/getAllAvailable")]
-        public IEnumerable<GameInfo> getAllAvailable()
+        [Route("api/game/getallavailable")]
+        public IEnumerable<GameInfo> GetAllAvailable()
         {
-            return GameRepository.Instance.GetAllGameInfoAvailable();
+
+            return GameRepository.Instance.GetAllGameInfoAvailable().Select(x => x.ToGameInfo());
         }
 
-        [HttpPost]
-        [Route("api/user/register")]
-        public UserLight Register(UserRegister UserReg)
-        {
-            int userIDRegistered = UserRepository.Instance.Insert(UserReg.ToUserPoco());
-            return UserRepository.Instance.Get(userIDRegistered).ToClientUserLight();
-        }
+        //[HttpPost]
+        //[Route("api/user/register")]
+        //public UserLight Register(UserRegister UserReg)
+        //{
+
+        //    return null;
+        //}
 
     }
 

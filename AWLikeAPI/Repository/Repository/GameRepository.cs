@@ -53,10 +53,10 @@ namespace AWLike.Repository
             cmd.AddParameter("MapID", Entity.MapID);
             cmd.AddParameter("UserTurnNumb", Entity.UserTurnNumb);
 
-            return (Db.ExecuteNonQuery(cmd)>0);
+            return (Db.ExecuteNonQuery(cmd) > 0);
         }
 
-        public GamePOCO Get(int Id)
+        public override GamePOCO Get(int Id)
         {
             Command cmd = new Command($"SELECT * FROM {TableName} WHERE Id = @Id");
 
@@ -65,25 +65,59 @@ namespace AWLike.Repository
             return Db.ExecuteReader(cmd, Selector).SingleOrDefault();
         }
 
-        
+
         public IEnumerable<GamePOCO> GetAllGameInfoAvailable()
         {
-            Command cmd = new Command($"select g.Id, u.Username, g.Name, g.MapID from Game as g join Rel_User_Game as r on g.Id = r.Ref_Game join [User] as u on r.Ref_User = u.Id where g.InGame = 0");
+            Command cmd = new Command(@"SELECT G.Id as GameID,J.NumberOfPlayer, G.Name as GameName, G.MapID, G.InGame, U.Id as UserID,U.Username FROM Game AS G LEFT JOIN
+                                        (SELECT R.Ref_Game, COUNT(*) as NumberOfPlayer
+                                        FROM Rel_User_Game as R
+                                        GROUP bY R.Ref_Game) as J ON J.Ref_Game = G.Id
+                                        LEFT JOIN Rel_User_Game as R ON G.Id = R.Ref_Game
+                                        LEFT JOIN[User] as U ON R.Ref_User = U.Id
+                                        where G.InGame = 0
+                                        Order By GameID");
 
             List<GamePOCO> list = new List<GamePOCO>();
 
-            foreach (dynamic game in Db.ExecuteReader(cmd, Selector))
+            foreach (dynamic gamePlayerDBItem in Db.ExecuteReader(cmd, (data) => { return data; }))
             {
-                var elem = list.FirstOrDefault(item => item.Id == game.Id);
-                if (elem == null)
+                GamePOCO Item = list.FirstOrDefault(item => item.Id == (int)gamePlayerDBItem["GameId"]);
+                if (Item == null)
                 {
-                    GamePOCO g = new GamePOCO {  };
+                    GamePOCO g = new GamePOCO
+                    {
+                        Id = gamePlayerDBItem["GameId"],
+                        Name = ((string)gamePlayerDBItem["GameName"]).ToString(),
+                        MapID = (int)gamePlayerDBItem["MapID"],
+                        UserList = new List<UserPOCO>(),
+                        NumberOfPlayer = (int)gamePlayerDBItem["NumberOfPlayer"]
+
+                    };
+                    Item = g;
+                    list.Add(g);
+                    
                 }
-                else
-                {
-                    elem.UserList.Add(new UserPOCO { });
-                }
-                //list.Add(game);
+
+                Item.UserList.Add(new UserPOCO() {
+                    Id = gamePlayerDBItem["UserID"],
+                    Username = gamePlayerDBItem["Username"],
+                    Email = "",
+                    Password = "",
+                    
+                });
+
+                
+
+                //var ItemList = list.FirstOrDefault(item => item.Id == gamePlayerDBItem.Id);
+                //if (ItemList == null)
+                //{
+                //    GamePOCO g = new GamePOCO { };
+                //}
+                //else
+                //{
+                //    ItemList.UserList.Add(new UserPOCO { });
+                //}
+                ////list.Add(game);
             }
 
             return list;

@@ -12,6 +12,6 @@ namespace AWLikeAPI.Models.Game
         public string Name { get; set; }
         public int MapID { get; set; }
         public List<UserLight> Ref_UserList { get; set; }
-
+        public int NumberOfPlayers { get; set; }
     }
 }
