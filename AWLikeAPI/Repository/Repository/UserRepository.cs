@@ -67,7 +67,7 @@ namespace AWLike.Repository
 
         public UserPOCO Get(string Username, string Password)
         {
-            Command cmd = new Command($"SELECT Id, Username, Email FROM [dbo].{TableName} WHERE (Username = @Username OR Email = @Username) AND Password = @Password");
+            Command cmd = new Command($"SELECT * FROM [dbo].{TableName} WHERE (Username = @Username OR Email = @Username) AND Password = @Password");
 
             cmd.AddParameter("Username", Username);
             cmd.AddParameter("Password", Password);

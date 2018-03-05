@@ -15,6 +15,6 @@ namespace Repository.Entity
         public int MapID { get; set; }
         public int UserTurnNumb { get; set; }
         public List<UserPOCO> UserList { get; set; }
-        public int NumberOfPlayer { get; set; }
+        public int NumberOfPlayers { get; set; }
     }
 }

@@ -17,15 +17,15 @@ namespace AWLikeAPI.Controllers
 
         [HttpPost]
         [Route("api/user/log")]
-        public UserLight Log(UserCredentials UserCred)
+        public ToGameUser Log(UserCredentials UserCred)
         {
-            UserLight UL =  UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
+            ToGameUser UL =  UserRepository.Instance.Get(UserCred.Username, UserCred.Password).ToClientUserLight();
             return UL;
         }
 
         [HttpPost]
         [Route("api/user/register")]
-        public UserLight Register(UserRegister UserReg)
+        public ToGameUser Register(UserRegister UserReg)
         {
             int userIDRegistered = UserRepository.Instance.Insert(UserReg.ToUserPoco());
             return UserRepository.Instance.Get(userIDRegistered).ToClientUserLight();

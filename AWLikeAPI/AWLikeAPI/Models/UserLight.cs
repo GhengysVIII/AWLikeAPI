@@ -5,7 +5,7 @@ using System.Web;
 
 namespace AWLikeAPI.Models
 {
-    public class UserLight
+    public class ToGameUser
     {
         public int Id { get; set; }
         public string Username { get; set; }

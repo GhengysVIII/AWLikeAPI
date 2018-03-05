@@ -21,13 +21,14 @@ namespace AWLikeAPI.Controllers
             return GameRepository.Instance.GetAllGameInfoAvailable().Select(x => x.ToGameInfo());
         }
 
-        //[HttpPost]
-        //[Route("api/user/register")]
-        //public UserLight Register(UserRegister UserReg)
-        //{
+        [HttpGet]
+        [Route("api/game/getallGameIn/{UserID}")]
+        public IEnumerable<GameInfo> GetAllGameIn(int UserID)
+        {
 
-        //    return null;
-        //}
+            return GameRepository.Instance.GetAllGameIn(UserID).Select(x => x.ToGameInfo());
+        }
+        
 
     }
 

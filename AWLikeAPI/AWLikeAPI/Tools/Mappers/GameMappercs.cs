@@ -17,8 +17,10 @@ namespace AWLikeAPI.Tools.Mappers
                 Id = g.Id,
                 MapID = g.MapID,
                 Name = g.Name,
-                Ref_UserList = g.UserList.Select(x => x.ToClientUserLight()).ToList(),
-                NumberOfPlayers = g.NumberOfPlayer                
+                UserTurnNumb = g.UserTurnNumb,
+                Ref_UserList = g.UserList.Select(x => x.ToGameUser()).ToList(),
+                NumberOfPlayers = g.NumberOfPlayers
+                
             };
         }
     }

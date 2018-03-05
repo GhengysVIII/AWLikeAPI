@@ -65,7 +65,53 @@ namespace AWLike.Repository
             return Db.ExecuteReader(cmd, Selector).SingleOrDefault();
         }
 
+        public IEnumerable<GamePOCO> GetAllGameIn(int UserID)
+        {
+            Command cmd = new Command(@"SELECT G.Id as GameID, g.UserTurnNumb ,
+                                          gameIn.NumberOfPlayer, G.Name as GameName, 
+                                          G.MapID, G.InGame, U.Id as UserID,U.Username, 
+                                          r.Ref_TurnPosition as TurnPosition FROM Game as g
+                                        INNER JOIN(SELECT r.Ref_Game, count(*) as NumberOfPlayer FROM Game as g
+                                            INNER JOIN Rel_User_Game as r ON g.Id = r.Ref_Game
+                                            WHERE g.InGame = @UserID 
+                                            GROUP BY R.Ref_Game) as gameIn on gameIn.Ref_Game = g.Id
+                                        INNER JOIN Rel_User_Game as r ON g.Id = r.Ref_Game
+                                        INNER JOIN[User] as u ON u.Id = r.Ref_User");
+            cmd.AddParameter("UserID", UserID);
+            List<GamePOCO> list = new List<GamePOCO>();
 
+            foreach (SqlDataReader gamePlayerDBItem in Db.ExecuteReader(cmd,(x)=>x))
+            {
+                GamePOCO item = list.FirstOrDefault((x) => x.Id == (int)gamePlayerDBItem["GameId"]);
+                if (item == null)
+                {
+                    item = new GamePOCO()
+                    {
+                        Id = (int)gamePlayerDBItem["GameId"],
+                        MapID = (int)gamePlayerDBItem["MapID"],
+                        Name = gamePlayerDBItem["GameName"].ToString(),
+                        NumberOfPlayers = (int)gamePlayerDBItem["NumberOfPlayer"],
+                        UserList = new List<UserPOCO>(),
+                        UserTurnNumb = (int)gamePlayerDBItem["UserTurnNumb"]
+                    };
+
+                    list.Add(item);
+                }
+
+                item.UserList.Add(new UserPOCO()
+                {
+                    Id = (int)gamePlayerDBItem["UserID"],
+                    Username = gamePlayerDBItem["UserID"].ToString(),
+                    TurnPosition = (int)gamePlayerDBItem["TurnPosition"]
+
+                });
+
+
+            }
+
+            return list;
+
+        }
         public IEnumerable<GamePOCO> GetAllGameInfoAvailable()
         {
             Command cmd = new Command(@"SELECT G.Id as GameID,J.NumberOfPlayer, G.Name as GameName, G.MapID, G.InGame, U.Id as UserID,U.Username FROM Game AS G LEFT JOIN
@@ -79,33 +125,37 @@ namespace AWLike.Repository
 
             List<GamePOCO> list = new List<GamePOCO>();
 
-            foreach (dynamic gamePlayerDBItem in Db.ExecuteReader(cmd, (data) => { return data; }))
+            foreach (SqlDataReader gamePlayerDBItem in Db.ExecuteReader(cmd, (data) => { return data; }))
             {
                 GamePOCO Item = list.FirstOrDefault(item => item.Id == (int)gamePlayerDBItem["GameId"]);
                 if (Item == null)
                 {
-                    GamePOCO g = new GamePOCO
+                    Item = new GamePOCO
                     {
-                        Id = gamePlayerDBItem["GameId"],
+                        Id = (int)gamePlayerDBItem["GameId"],
                         Name = ((string)gamePlayerDBItem["GameName"]).ToString(),
                         MapID = (int)gamePlayerDBItem["MapID"],
                         UserList = new List<UserPOCO>(),
-                        NumberOfPlayer = (int)gamePlayerDBItem["NumberOfPlayer"]
+                        NumberOfPlayers = gamePlayerDBItem["NumberOfPlayer"] == DBNull.Value ? 0 : (int)gamePlayerDBItem["NumberOfPlayer"]
 
                     };
-                    Item = g;
-                    list.Add(g);
+                    list.Add(Item);
                     
                 }
 
-                Item.UserList.Add(new UserPOCO() {
-                    Id = gamePlayerDBItem["UserID"],
-                    Username = gamePlayerDBItem["Username"],
-                    Email = "",
-                    Password = "",
-                    
-                });
-                
+                if (gamePlayerDBItem["UserID"] != DBNull.Value)
+                {
+                    Item.UserList.Add(new UserPOCO()
+                    {
+                        Id = (int)gamePlayerDBItem["UserID"],
+                        Username = (string)gamePlayerDBItem["Username"],
+                        Email = "",
+                        Password = "",
+
+                    });
+
+                }
+
                 //var ItemList = list.FirstOrDefault(item => item.Id == gamePlayerDBItem.Id);
                 //if (ItemList == null)
                 //{

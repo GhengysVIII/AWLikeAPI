@@ -1,5 +1,6 @@
 ﻿using AWLike.DAL.Entity;
 using AWLikeAPI.Models;
+using AWLikeAPI.Models.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace AWLikeAPI.Tools.Mappers
     public static class UserMapper
     {
         //UserLight
-        public static UserPOCO ToGlobalUserPoco(this UserLight User)
+        public static UserPOCO ToGlobalUserPoco(this ToGameUser User)
         {
             return new UserPOCO
             {
@@ -22,9 +23,9 @@ namespace AWLikeAPI.Tools.Mappers
         }
 
         //UserPOCO
-        public static UserLight ToClientUserLight(this UserPOCO User)
+        public static ToGameUser ToClientUserLight(this UserPOCO User)
         {
-            return new UserLight
+            return new ToGameUser
             {
                 Id = User.Id,
                 Email = User.Email,
@@ -43,6 +44,18 @@ namespace AWLikeAPI.Tools.Mappers
             };
         }
 
+        //GameUser
+        public static GameUser ToGameUser(this UserPOCO User)
+        {
+            return new GameUser()
+            {
+                Id = User.Id,
+                Email = User.Email,
+                TurnPosition = User.TurnPosition,
+                Username = User.Username
+            };
+        }
+
         //UserRegister
         public static UserPOCO ToUserPoco(this UserRegister User)
         {
@@ -53,5 +66,7 @@ namespace AWLikeAPI.Tools.Mappers
                 Password = User.Password
             };
         }
+
+        
     }
 }
